@@ -1,0 +1,43 @@
+{
+  "permissions": {
+    "allow": [
+      "PowerShell(Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy RemoteSigned -Force)",
+      "Bash(npm run *)",
+      "Bash(python -c ' *)",
+      "mcp__Claude_Preview__preview_start",
+      "Bash(node -e \"const d = require\\('./app/generated/poster-icon-data'\\); console.log\\(Object.keys\\(d.posterIconDataUrls\\)\\)\")",
+      "mcp__Claude_in_Chrome__tabs_context_mcp",
+      "Bash(Remove-Item -Recurse -Force \"C:\\\\Users\\\\20389\\\\Documents\\\\Codex\\\\2026-05-16\\\\create-a-minimal-mobile-first-fishing\\\\app\\\\api\")",
+      "Bash(npx tsc *)",
+      "Bash(node -e \"const fs = require\\('fs'\\); const content = fs.readFileSync\\('app/page.tsx', 'utf8'\\); console.log\\('useState count:', \\(content.match\\(/useState/g\\) || []\\).length\\); console.log\\('useState\\(5\\):', content.includes\\('useState\\(5\\)'\\)\\); console.log\\('preview=card:', content.includes\\('preview=card'\\)\\); console.log\\('AnimatePresence in JSX:', \\(content.match\\(/<AnimatePresence/g\\) || []\\).length\\);\")",
+      "Bash(Remove-Item -Recurse -Force \"C:\\\\Users\\\\20389\\\\Documents\\\\Codex\\\\2026-05-16\\\\create-a-minimal-mobile-first-fishing\\\\.next\" -ErrorAction SilentlyContinue)",
+      "Bash(Write-Host \"cache cleared\")",
+      "Bash(netstat -ano)",
+      "Bash(findstr :3000)",
+      "Bash(findstr LISTENING)",
+      "Bash(npx tsx *)",
+      "PowerShell(\\(Get-Item \"C:\\\\Users\\\\20389\\\\Documents\\\\Codex\\\\2026-05-16\\\\create-a-minimal-mobile-first-fishing\\\\shangyu-card.svg\"\\).Length / 1KB)",
+      "WebSearch",
+      "Bash(Stop-Process -Name \"node\" -Force -ErrorAction SilentlyContinue)",
+      "Bash(Start-Sleep -Milliseconds 500)",
+      "Bash(Write-Output \"done\")",
+      "PowerShell(Stop-Process -Name \"node\" -Force -ErrorAction SilentlyContinue)",
+      "Bash(node static-server.js)",
+      "PowerShell($result = netstat -ano | findstr \":3000\"; $result | Select-Object -First 5; $pids = \\($result | ForEach-Object { \\($_ -split '\\\\s+'\\)[-1] } | Sort-Object -Unique\\); $pids | ForEach-Object { Stop-Process -Id $_ -Force -ErrorAction SilentlyContinue }; Write-Output \"Killed PIDs: $pids\")",
+      "Bash(cp /tmp/a6d7697a-6462-413f-92d1-f7b7bcb792c7.tmp.png \"/mnt/c/Users/20389/Downloads/icon/Minnow Lure Icon.png\")",
+      "Read(//mnt/c/Users/20389/Downloads/icon/**)",
+      "Bash(cp /tmp/a6d7697a-6462-413f-92d1-f7b7bcb792c7.tmp.png /tmp/minnow_lure.png)",
+      "Bash(python3 -c ' *)",
+      "Read(//tmp/**)",
+      "Bash(base64 /tmp/a6d7697a-6462-413f-92d1-f7b7bcb792c7.tmp.png | tr -d '\\\\n' > /tmp/minnow_b64.txt && echo \"done\")",
+      "Bash(cp /tmp/a6d7697a-6462-413f-92d1-f7b7bcb792c7.tmp.png \"/mnt/c/Users/20389/Documents/Codex/2026-05-16/create-a-minimal-mobile-first-fishing/minnow_lure.png\" 2>&1 && echo \"ok\")",
+      "Bash(ls /mnt/c/ 2>&1 | head -5)",
+      "Bash(gh --version)",
+      "Bash(git --version)",
+      "Bash(git init *)",
+      "Bash(git config *)",
+      "Bash(git add *)",
+      "Bash(git rm *)"
+    ]
+  }
+}

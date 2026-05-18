@@ -1,0 +1,190 @@
+@import "tailwindcss";
+
+:root {
+  --background: #061526;
+  --foreground: #ffffff;
+  --accent: #d6e264;
+  --muted: rgba(255, 255, 255, 0.64);
+  --panel: rgba(255, 255, 255, 0.075);
+  --panel-strong: rgba(255, 255, 255, 0.12);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  background: var(--background);
+}
+
+body {
+  min-height: 100vh;
+  margin: 0;
+  background:
+    radial-gradient(circle at 50% 105%, rgba(214, 226, 100, 0.12), transparent 36%),
+    linear-gradient(180deg, #07192b 0%, #061526 48%, #030a13 100%);
+  color: var(--foreground);
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Segoe UI", sans-serif;
+  letter-spacing: 0;
+}
+
+button,
+input {
+  font: inherit;
+}
+
+button {
+  -webkit-tap-highlight-color: transparent;
+}
+
+.lake-motion {
+  position: absolute;
+  inset: auto -20% 0;
+  height: 45vh;
+  pointer-events: none;
+  overflow: hidden;
+  opacity: 0.78;
+}
+
+.lake-motion::before,
+.lake-motion::after {
+  position: absolute;
+  right: -12%;
+  left: -12%;
+  height: 44%;
+  content: "";
+  border-radius: 50%;
+  background:
+    repeating-linear-gradient(
+      92deg,
+      rgba(255, 255, 255, 0.16) 0 1px,
+      transparent 1px 72px
+    );
+  filter: blur(0.4px);
+  transform: rotate(-2deg);
+  animation: drift 13s ease-in-out infinite alternate;
+}
+
+.lake-motion::before {
+  bottom: 20%;
+}
+
+.lake-motion::after {
+  bottom: 2%;
+  opacity: 0.42;
+  animation-duration: 18s;
+}
+
+@keyframes drift {
+  from {
+    transform: translateX(-20px) rotate(-2deg);
+  }
+  to {
+    transform: translateX(22px) rotate(-1deg);
+  }
+}
+
+.soft-card {
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: var(--panel);
+  box-shadow: 0 24px 80px rgba(0, 0, 0, 0.24);
+  backdrop-filter: blur(18px);
+}
+
+.thin-text {
+  font-weight: 300;
+}
+
+/* ── Share Card Template ─────────────────────────────────────── */
+.scard {
+  width: 720px;
+  background: #0d1a30;
+  border: 3px solid #2a4865;
+  box-shadow: 0 0 0 3px #0d1a30, 0 0 0 5px #1c324f;
+  padding: 26px 26px 22px;
+  position: relative;
+  font-family: "Noto Sans SC", system-ui, sans-serif;
+  color: #e8eef0;
+  box-sizing: border-box;
+  -webkit-font-smoothing: none;
+}
+.scard-corner {
+  position: absolute; width: 22px; height: 22px; pointer-events: none;
+}
+.scard-corner.tl { top: 6px; left: 6px; }
+.scard-corner.tr { top: 6px; right: 6px; transform: scaleX(-1); }
+.scard-corner.bl { bottom: 6px; left: 6px; transform: scaleY(-1); }
+.scard-corner.br { bottom: 6px; right: 6px; transform: scale(-1,-1); }
+.scard-corner svg { width: 100%; height: 100%; }
+.scard-top-row {
+  display: grid; grid-template-columns: repeat(5, 1fr);
+  gap: 4px; padding: 4px 4px 16px;
+  border-bottom: 2px dashed #2a4865; margin-bottom: 18px;
+}
+.scard-stat { display: flex; align-items: center; gap: 8px; }
+.scard-stat-label { font-size: 12px; color: #b8d76b; letter-spacing: 2px; margin-bottom: 3px; line-height: 1.1; }
+.scard-stat-value { font-size: 13px; color: #e8eef0; line-height: 1.1; }
+.scard-title-row {
+  display: flex; align-items: center; justify-content: center;
+  gap: 14px; margin: 6px 0 12px;
+}
+.scard-title-deco { color: #b8d76b; font-family: monospace; font-size: 18px; letter-spacing: 2px; opacity: 0.9; }
+.scard-title-main {
+  font-size: 44px; letter-spacing: 6px; color: #b8d76b; font-weight: 400;
+  text-shadow: 3px 3px 0 #2d4015, 6px 6px 0 rgba(0,0,0,0.4);
+  -webkit-font-smoothing: none;
+}
+.scard-hero {
+  position: relative; margin: 6px 0 18px; height: 260px;
+  overflow: hidden;
+  background: linear-gradient(180deg, #071525 0%, #0d2035 60%, #0a1a2c 100%);
+}
+.scard-hero-fish {
+  position: absolute; left: 0; top: 0; width: 580px; height: 260px;
+  object-fit: contain; object-position: center;
+  image-rendering: pixelated;
+}
+.scard-target-card {
+  position: absolute; top: 14px; right: 14px; width: 90px;
+  background: rgba(5,10,20,0.9); border: 2px solid #b8d76b;
+  padding: 10px 8px 10px; text-align: center;
+}
+.scard-target-label { font-size: 11px; color: #b8d76b; letter-spacing: 2px; margin-bottom: 6px; }
+.scard-target-name { font-size: 22px; color: #e8eef0; font-weight: 400; letter-spacing: 2px; line-height: 1.2; }
+.scard-info-grid {
+  border: 2px solid #2a4865; background: #0a172c;
+  display: grid; grid-template-columns: 1fr 1fr;
+  grid-template-rows: repeat(4, 1fr); margin-bottom: 14px;
+}
+.scard-info-cell {
+  padding: 0 12px; display: flex; align-items: center; gap: 10px;
+  border-right: 1px dashed #1c324f; border-bottom: 1px dashed #1c324f; min-height: 72px;
+}
+.scard-info-cell:nth-child(2n) { border-right: none; }
+.scard-info-cell:nth-child(n+7) { border-bottom: none; }
+.scard-info-label { font-size: 13px; color: #b8d76b; letter-spacing: 2px; margin-bottom: 4px; line-height: 1.2; }
+.scard-info-value { font-size: 12px; color: #e8eef0; line-height: 1.4; }
+.scard-stars { display: flex; gap: 2px; margin-top: 4px; }
+.scard-activity-top { display: flex; align-items: center; gap: 10px; width: 100%; }
+.scard-activity-num { font-family: monospace; font-size: 20px; color: #e8eef0; letter-spacing: 1px; }
+.scard-activity-sub { font-size: 10px; color: #b8c3cc; margin-left: 2px; }
+.scard-meter { display: grid; grid-template-columns: repeat(12, 1fr); gap: 3px; margin-top: 6px; }
+.scard-meter span { height: 10px; }
+.scard-section-box {
+  border: 2px solid #2a4865; background: #0a172c;
+  margin-bottom: 12px; padding: 10px; display: flex; gap: 12px;
+}
+.scard-scene {
+  width: 180px; height: 96px; flex-shrink: 0; overflow: hidden;
+  background: linear-gradient(180deg, #071a30 0%, #0a2540 50%, #1a4060 100%);
+  display: flex; align-items: center; justify-content: center; gap: 6px;
+}
+.scard-section-body { flex: 1; padding-top: 4px; }
+.scard-section-header { display: flex; align-items: center; gap: 6px; margin-bottom: 6px; }
+.scard-section-title { font-size: 15px; color: #b8d76b; letter-spacing: 2px; }
+.scard-section-text { font-size: 12px; color: #b8c3cc; line-height: 1.7; }
+.scard-footer {
+  text-align: center; color: #b8d76b; font-size: 12px;
+  letter-spacing: 5px; margin-top: 10px; padding-top: 12px;
+  border-top: 1px solid #1c324f;
+}

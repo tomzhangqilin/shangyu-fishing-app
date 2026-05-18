@@ -1,0 +1,13 @@
+node_modules/
+.next/
+out/
+.env.local
+.env*.local
+.npm-cache/
+.python-packages/
+.DS_Store
+Thumbs.db
+*.log
+preview-card.jpg
+minnow_lure.png
+shangyu-card.svg
