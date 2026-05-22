@@ -791,15 +791,8 @@ export default function Home() {
 
           {/* Footer */}
           <div className="scard-footer" style={{ justifyContent: 'space-between', padding: '10px 4px 4px' }}>
-            {/* Left: 上渔 + hook */}
-            <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-              <HookSvg color="#b8d76b" size={20} />
-              <span style={{ fontSize: '16px', color: '#b8d76b', letterSpacing: '3px', fontFamily: 'Zpix, sans-serif' }}>上渔</span>
-            </div>
-            {/* Right: 渔悦 logo in white badge */}
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src={cardIconDataUrls.yuyueLogo} alt="渔悦大学生钓鱼交流平台"
-              style={{ height: '32px', width: 'auto', objectFit: 'contain', background: '#fff', padding: '2px 6px', borderRadius: '2px' }} />
+            <span style={{ fontSize: '16px', color: '#b8d76b', letterSpacing: '3px', fontFamily: 'Zpix, sans-serif' }}>上渔</span>
+            <span style={{ fontSize: '13px', color: '#b8c3cc', letterSpacing: '1px', fontFamily: 'Zpix, sans-serif' }}>渔悦大学生钓鱼交流平台</span>
           </div>
         </div>
       </div>
