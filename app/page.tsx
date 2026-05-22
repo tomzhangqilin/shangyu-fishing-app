@@ -912,10 +912,10 @@ function buildManualSvgShareCard({
   const svg = `
 <svg xmlns="http://www.w3.org/2000/svg" width="720" height="1080" viewBox="0 0 720 1080">
   <style>
+    @font-face{font-family:BestTenDOT;src:url("${window.location.origin}/fonts/BestTen-DOT.otf") format("opentype");}
     @font-face{font-family:HanChen7px;src:url("${window.location.origin}/fonts/HanChen7px.ttf") format("truetype");}
-    @font-face{font-family:Galmuri11;src:url("${window.location.origin}/fonts/Galmuri11.ttf") format("truetype");}
     @font-face{font-family:Zpix;src:url("${window.location.origin}/fonts/ark-pixel.otf") format("opentype");}
-    text{font-family:HanChen7px,Galmuri11,Zpix,"Noto Sans SC",sans-serif;dominant-baseline:hanging}
+    text{font-family:BestTenDOT,HanChen7px,Zpix,"Noto Sans SC",sans-serif;dominant-baseline:hanging}
     .stat-label{fill:#b8d76b;font-size:16px;letter-spacing:2px}
     .stat-value{fill:#f4f6ec;font-size:15px}
     .label{fill:#b8d76b;font-size:17px;letter-spacing:2px}
