@@ -524,7 +524,8 @@ export default function Home() {
                   </ChoiceCard>
                 ))}
               </div>
-              <PrimaryButton className="mt-auto" onClick={detectEnvironment}>
+              <div className="flex-1 min-h-10" />
+              <PrimaryButton onClick={detectEnvironment}>
                 继续
                 <LocateFixed size={17} />
               </PrimaryButton>
@@ -551,7 +552,8 @@ export default function Home() {
                   </>
                 )}
               </div>
-              <PrimaryButton className="mt-auto" disabled={detecting} onClick={() => setStep(3)}>
+              <div className="flex-1 min-h-10" />
+              <PrimaryButton disabled={detecting} onClick={() => setStep(3)}>
                 继续
                 <ChevronRight size={18} />
               </PrimaryButton>
@@ -573,7 +575,8 @@ export default function Home() {
                   </ChoiceCard>
                 ))}
               </div>
-              <PrimaryButton className="mt-auto" onClick={generateStrategy}>
+              <div className="flex-1 min-h-10" />
+              <PrimaryButton onClick={generateStrategy}>
                 生成策略
                 <ChevronRight size={18} />
               </PrimaryButton>
@@ -606,8 +609,8 @@ export default function Home() {
                   </>
                 )}
               </div>
+              <div className="flex-1 min-h-10" />
               <PrimaryButton
-                className="mt-auto"
                 disabled={generating}
                 onClick={createShareCard}
               >
@@ -640,7 +643,7 @@ export default function Home() {
                   </div>
                 )}
               </div>
-              <PrimaryButton className="mt-4 shrink-0" disabled={cardGenerating} onClick={saveShareCard}>
+              <PrimaryButton className="mt-8 shrink-0" disabled={cardGenerating} onClick={saveShareCard}>
                 {cardGenerating ? "生成中" : saved ? "已保存" : "保存至相册"}
                 <Download size={17} />
               </PrimaryButton>
