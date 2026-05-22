@@ -48,6 +48,8 @@ const cardIconDataUrls = {
   baitWorm: icon("baitWorm"),
   baitDough: icon("baitDough"),
   baitLure: icon("baitLure"),
+  // 今日状态专属星形
+  activityStar: "/poster-icons/activityStar.svg",
 };
 
 const fishArtDataUrls = {
@@ -705,7 +707,7 @@ export default function Home() {
               { icon: getBaitIcon(currentStrategy.recommended_bait), label: '推荐饵料', value: currentStrategy.recommended_bait, extra: '' },
               { icon: cardIconDataUrls.reel,     label: '操作方式', value: currentStrategy.retrieve_style, extra: '' },
               { icon: cardIconDataUrls.clock,    label: '最佳时间', value: currentStrategy.best_time, extra: '' },
-              { icon: cardIconDataUrls.radar,    label: '今日状态', value: currentStrategy.fish_behavior, extra: 'activity' },
+              { icon: cardIconDataUrls.activityStar, label: '今日状态', value: currentStrategy.fish_behavior, extra: 'activity' },
             ].map(({ icon, label, value, extra }, i) => (
               <div key={i} className={`scard-info-cell ${extra === 'activity' ? 'scard-info-cell-wide' : ''}`}>
                 {/* eslint-disable-next-line @next/next/no-img-element */}
