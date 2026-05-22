@@ -802,7 +802,7 @@ export default function Home() {
 
 function Screen({ children, className = "" }: { children: React.ReactNode; className?: string }) {
   return (
-    <section className={`flex flex-1 flex-col pb-4 pt-10 ${className}`}>
+    <section className={`flex flex-1 flex-col pb-12 pt-10 ${className}`}>
       {children}
     </section>
   );
@@ -966,8 +966,8 @@ function buildManualSvgShareCard({
 function StepTitle({ eyebrow, title }: { eyebrow: string; title: string }) {
   return (
     <div>
-      <p className="text-sm thin-text text-[#5a7a00]">{eyebrow}</p>
-      <h1 className="mt-4 text-4xl thin-text">{title}</h1>
+      <p className="text-base thin-text text-[#5a7a00]">{eyebrow}</p>
+      <h1 className="mt-4 text-5xl thin-text">{title}</h1>
     </div>
   );
 }
@@ -998,7 +998,7 @@ function ChoiceCard({ children, selected, onClick }: { children: React.ReactNode
   return (
     <button
       onClick={onClick}
-      className={`flex min-h-24 items-center justify-between rounded-[28px] border px-6 text-left text-2xl thin-text transition duration-300 ${
+      className={`flex min-h-24 items-center justify-between rounded-[28px] border px-6 text-left text-3xl thin-text transition duration-300 ${
         selected
           ? "border-[#D6E264] bg-[#D6E264]/20 text-slate-900 shadow-[0_8px_24px_rgba(90,122,0,0.15)]"
           : "border-slate-200 bg-white text-slate-700 hover:border-slate-300 hover:bg-slate-50"

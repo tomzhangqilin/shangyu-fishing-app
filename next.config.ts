@@ -5,7 +5,7 @@ const isProduction = process.env.NODE_ENV === "production";
 const nextConfig: NextConfig = {
   ...(isProduction
     ? {
-        assetPrefix: "./",
+        assetPrefix: "/",
         output: "export" as const,
       }
     : {}),
