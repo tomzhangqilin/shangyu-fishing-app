@@ -486,7 +486,8 @@ export default function Home() {
       <div className="relative z-10 mx-auto flex min-h-[calc(100vh-48px)] w-full max-w-md flex-col">
         <header className="flex items-center justify-between py-2">
           <div className="flex items-center gap-1.5">
-            <HookSvg color="#1e2d5c" size={22} />
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src="/poster-icons/hookLogo.webp" alt="上渔" style={{ height: 28, width: 'auto', mixBlendMode: 'multiply' }} />
             <span className="text-xl font-bold tracking-widest text-slate-800">上渔</span>
           </div>
           {step > 0 && (
@@ -500,7 +501,7 @@ export default function Home() {
           {step === 0 && (
             <Screen key="landing" className="items-center justify-center text-center">
               <div>
-                <p className="mb-6 text-sm thin-text text-slate-500">千帆智能钓鱼策略</p>
+                <p className="mb-6 text-sm thin-text text-slate-500">上渔 x 渔悦智能钓鱼策略</p>
                 <h1 className="text-5xl thin-text leading-tight">今天怎么钓？</h1>
                 <p className="mx-auto mt-6 max-w-xs whitespace-pre-line text-xl thin-text leading-8 text-slate-600">
                   {"基于当前位置与天气，\n生成今日钓鱼策略。"}
@@ -911,8 +912,10 @@ function buildManualSvgShareCard({
   const svg = `
 <svg xmlns="http://www.w3.org/2000/svg" width="720" height="1080" viewBox="0 0 720 1080">
   <style>
+    @font-face{font-family:Galmuri11;src:url("${window.location.origin}/fonts/Galmuri11.ttf") format("truetype");}
+    @font-face{font-family:HYPixel;src:url("${window.location.origin}/fonts/HYPixel11px.ttf") format("truetype");}
     @font-face{font-family:Zpix;src:url("${window.location.origin}/fonts/ark-pixel.otf") format("opentype");}
-    text{font-family:Zpix,"Noto Sans SC",sans-serif;dominant-baseline:hanging}
+    text{font-family:Galmuri11,HYPixel,Zpix,"Noto Sans SC",sans-serif;dominant-baseline:hanging}
     .stat-label{fill:#b8d76b;font-size:16px;letter-spacing:2px}
     .stat-value{fill:#f4f6ec;font-size:15px}
     .label{fill:#b8d76b;font-size:17px;letter-spacing:2px}
