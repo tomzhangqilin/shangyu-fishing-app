@@ -6,7 +6,7 @@
     "dev": "next dev",
     "build": "next build",
     "preview": "node static-server.js",
-    "start": "next start",
+    "start": "node static-server.js",
     "lint": "next lint"
   },
   "dependencies": {

@@ -283,7 +283,7 @@ createServer(async (req, res) => {
     res.writeHead(404, { "Content-Type": "text/plain; charset=utf-8" });
     res.end("未找到页面");
   }
-}).listen(port, "localhost", () => {
+}).listen(port, "0.0.0.0", () => {
   console.log(`上渔预览已启动：http://localhost:${port}`);
 });
 

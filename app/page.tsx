@@ -1,12 +1,63 @@
 "use client";
 
-import { AnimatePresence, motion } from "framer-motion";
-import html2canvas from "html2canvas";
+import { AnimatePresence } from "framer-motion";
 import { Check, ChevronRight, Download, LocateFixed } from "lucide-react";
 import { useMemo, useState } from "react";
-import { cardIconDataUrls } from "./generated/card-icon-data";
-import { fishArtDataUrls } from "./generated/fish-art-data";
-import { posterIconDataUrls } from "./generated/poster-icon-data";
+
+const icon = (name: string) => `/poster-icons/${name}.png`;
+const fishArt = (name: string) => `/fish-art/${name}.png`;
+
+const posterIconDataUrls = {
+  calendar: icon("calendar"),
+  cloud: icon("cloud"),
+  clock: icon("clock"),
+  depth: icon("depth"),
+  fish: icon("fish"),
+  fisherman: icon("fisherman"),
+  fishSprite: icon("fishSprite"),
+  grass: icon("grass"),
+  leaf: icon("leaf"),
+  log: icon("log"),
+  mapPin: icon("mapPin"),
+  radar: icon("radar"),
+  reel: icon("reel"),
+  star: icon("star"),
+  sun: icon("sun"),
+  sunset: icon("sunset"),
+  thermometer: icon("thermometer"),
+  wind: icon("wind"),
+};
+
+const cardIconDataUrls = {
+  ...posterIconDataUrls,
+  sunny: icon("sunny"),
+  rain: icon("rain"),
+  thunderstorm: icon("thunderstorm"),
+  mapPin2: icon("mapPin"),
+  bait: icon("cornBait"),
+  cornBait: icon("cornBait"),
+  lure: icon("lure"),
+  vibLure: icon("vibLure"),
+  spoonLure: icon("spoonLure"),
+  rocky: icon("rocky"),
+  bridge: icon("bridge"),
+  grassArt: icon("grassArt"),
+  seasonScene: icon("seasonScene"),
+  shoreScene: icon("shoreScene"),
+};
+
+const fishArtDataUrls = {
+  bass: fishArt("bass"),
+  blackCarp: fishArt("black-carp"),
+  catfish: fishArt("catfish"),
+  generic: fishArt("generic"),
+  grassCarp: fishArt("grass-carp"),
+  mandarin: fishArt("mandarin"),
+  pike: fishArt("pike"),
+  seaBass: fishArt("sea-bass"),
+  snakehead: fishArt("snakehead"),
+  whitebait: fishArt("whitebait"),
+};
 
 type Weather = {
   city: string;
@@ -127,6 +178,8 @@ export default function Home() {
   const [saved, setSaved] = useState(false);
   const [cardDataUrl, setCardDataUrl] = useState<string | null>(null);
   const [cardGenerating, setCardGenerating] = useState(false);
+  const [cardError, setCardError] = useState(false);
+  const [cardErrorDetail, setCardErrorDetail] = useState("");
   const [posterIcons, setPosterIcons] = useState<Record<string, HTMLImageElement | null>>({});
 
   const targetFish = fish;
@@ -207,10 +260,12 @@ export default function Home() {
     // Clean fish image background and inject into template
     const rawSrc = getFishArtSrc(targetFish);
     let fishDataUrl = rawSrc || "";
+    let localFish: HTMLImageElement | null = null;
     if (rawSrc) {
       try {
         const img = await loadImage(rawSrc);
         if (!img) throw new Error("load failed");
+        localFish = img;
         const crop = getFishArtCrop(img);
         const cleaned = cleanFishImageBackground(img, crop);
         if (cleaned) fishDataUrl = cleaned.toDataURL("image/png");
@@ -218,20 +273,28 @@ export default function Home() {
     }
     const el = document.getElementById("share-card-tpl");
     if (!el) return "";
+    if (document.fonts?.load) {
+      await Promise.race([
+        Promise.all([document.fonts.load('16px "Zpix"'), document.fonts.ready]),
+        new Promise((resolve) => window.setTimeout(resolve, 1200)),
+      ]).catch(() => {});
+    }
     const fishImg = el.querySelector("[data-role='fish-art']") as HTMLImageElement | null;
     if (fishImg && fishDataUrl) {
       fishImg.src = fishDataUrl;
       await new Promise<void>(r => { const t = setTimeout(r, 300); fishImg.onload = () => { clearTimeout(t); r(); }; });
     }
-    const canvas = await html2canvas(el, {
-      scale: 2,
-      useCORS: true,
-      allowTaint: true,
-      backgroundColor: null,
-      logging: false,
-      width: 720,
-    });
-    return canvas.toDataURL("image/png");
+    await inlineImagesAsDataUrls(el);
+    try {
+      return buildSvgShareCard(el);
+    } catch {
+      return buildManualSvgShareCard({
+        weather: currentWeather,
+        fish: targetFish,
+        strategy: currentStrategy,
+        fishSrc: fishDataUrl,
+      });
+    }
   }
 
   async function requestAiShareImage(): Promise<string | null> {
@@ -263,7 +326,7 @@ export default function Home() {
     try {
       const dataUrl = cardDataUrl || (await buildShareCard());
       const link = document.createElement("a");
-      link.download = "shangyu-pixel-card.png";
+      link.download = dataUrl.startsWith("data:image/svg+xml") ? "shangyu-pixel-card.svg" : "shangyu-pixel-card.png";
       link.href = dataUrl;
       link.click();
       setSaved(true);
@@ -275,12 +338,17 @@ export default function Home() {
   async function createShareCard() {
     setSaved(false);
     setCardDataUrl(null);
+    setCardError(false);
+    setCardErrorDetail("");
     setCardGenerating(true);
     setStep(5);
     try {
       const dataUrl = await buildShareCard();
+      if (!dataUrl) throw new Error("empty card");
       setCardDataUrl(dataUrl);
-    } catch {
+    } catch (error) {
+      setCardError(true);
+      setCardErrorDetail(error instanceof Error ? error.message : String(error));
       setCardDataUrl("");
     } finally {
       setCardGenerating(false);
@@ -303,7 +371,7 @@ export default function Home() {
         <AnimatePresence>
           {step === 0 && (
             <Screen key="landing" className="items-center justify-center text-center">
-              <motion.div initial={{ opacity: 0, y: 18 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -14 }}>
+              <div>
                 <p className="mb-6 text-sm thin-text text-white/52">千帆智能钓鱼策略</p>
                 <h1 className="text-5xl thin-text leading-tight">今天怎么钓？</h1>
                 <p className="mx-auto mt-6 max-w-xs whitespace-pre-line text-xl thin-text leading-8 text-white/68">
@@ -313,7 +381,7 @@ export default function Home() {
                   开始
                   <ChevronRight size={18} />
                 </PrimaryButton>
-              </motion.div>
+              </div>
             </Screen>
           )}
 
@@ -431,6 +499,13 @@ export default function Home() {
                     alt="分享卡"
                     className="w-full rounded-[20px] shadow-2xl shadow-black/40"
                   />
+                ) : cardError ? (
+                  <div className="flex aspect-[9/13] w-full flex-col items-center justify-center rounded-[20px] border border-red-300/30 bg-red-950/20 px-8 text-center text-lg thin-text leading-8 text-red-100/80">
+                    <span>生成失败，请返回后再试一次</span>
+                    {cardErrorDetail ? (
+                      <span className="mt-4 max-w-full break-words text-xs leading-5 text-red-100/50">{cardErrorDetail}</span>
+                    ) : null}
+                  </div>
                 ) : (
                   <div className="flex aspect-[9/13] w-full items-center justify-center rounded-[20px] border border-white/12 bg-white/[0.06] text-lg thin-text text-white/56">
                     正在生成…
@@ -446,9 +521,9 @@ export default function Home() {
         </AnimatePresence>
       </div>
 
-      {/* Hidden html2canvas share card template */}
-      <div style={{ position: 'fixed', left: -9999, top: 0, zIndex: -100, pointerEvents: 'none' }}>
-        <div id="share-card-tpl" className="scard" style={{ fontFamily: '"Noto Sans SC","Microsoft YaHei","PingFang SC",sans-serif' }}>
+      {/* Hidden share card template used for SVG generation */}
+      <div style={{ position: 'fixed', left: -9999, top: 0, zIndex: 0, pointerEvents: 'none' }}>
+        <div id="share-card-tpl" className="scard">
 
           {/* Corner brackets */}
           {(['tl','tr','bl','br'] as const).map(pos => (
@@ -471,7 +546,7 @@ export default function Home() {
             ].map(({ icon, label, value }, i) => (
               <div key={i} className="scard-stat">
                 {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img src={icon} alt="" style={{ width: 26, height: 26, imageRendering: 'pixelated', flexShrink: 0 }} />
+                <img src={icon} alt="" className="scard-stat-icon" />
                 <div>
                   <div className="scard-stat-label">{label}</div>
                   <div className="scard-stat-value">{value}</div>
@@ -482,64 +557,72 @@ export default function Home() {
 
           {/* Title */}
           <div className="scard-title-row">
-            <span className="scard-title-deco">&gt;</span>
             <div className="scard-title-main">{currentStrategy.title}</div>
-            <span className="scard-title-deco">&lt;</span>
+          </div>
+          <div className="scard-subtitle-row">
+            <span className="scard-subtitle-label">目标鱼</span>
+            <span className="scard-subtitle-value">{targetFish}</span>
           </div>
 
-          {/* Hero: fish art + target card */}
+          {/* Hero: fish art */}
           <div className="scard-hero">
+            <div className="scard-hero-bg" />
+            <div className="scard-bubble b1" />
+            <div className="scard-bubble b2" />
+            <div className="scard-bubble b3" />
             {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img data-role="fish-art" alt="fish" className="scard-hero-fish" />
-            <div className="scard-target-card">
-              <div className="scard-target-label">目标鱼</div>
-              <div className="scard-target-name">{targetFish}</div>
+            <img src={cardIconDataUrls.grassArt} alt="" style={{ position: 'absolute', bottom: 0, left: 28, width: 96, height: 'auto', imageRendering: 'pixelated' }} />
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src={cardIconDataUrls.grassArt} alt="" style={{ position: 'absolute', bottom: 0, right: 28, width: 96, height: 'auto', imageRendering: 'pixelated', transform: 'scaleX(-1)' }} />
+            <div className="scard-water-line one" />
+            <div className="scard-water-line two" />
+            <div className="scard-fish-wrap">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img data-role="fish-art" alt="fish" className="scard-hero-fish" />
             </div>
           </div>
 
-          {/* Info grid 2×4 */}
+          {/* Info grid */}
           <div className="scard-info-grid">
             {[
-              { icon: cardIconDataUrls.radar,    label: '今日状态', value: currentStrategy.fish_behavior, extra: 'stars' },
+              { icon: getStructureIcon(currentStrategy.recommended_area), label: '推荐结构', value: extractStructure(currentStrategy.recommended_area), extra: '' },
               { icon: cardIconDataUrls.mapPin,   label: '推荐区域', value: currentStrategy.recommended_area, extra: '' },
               { icon: cardIconDataUrls.depth,    label: '推荐水深', value: currentStrategy.recommended_depth, extra: '' },
               { icon: getBaitIcon(currentStrategy.recommended_bait), label: '推荐饵料', value: currentStrategy.recommended_bait, extra: '' },
               { icon: cardIconDataUrls.reel,     label: '操作方式', value: currentStrategy.retrieve_style, extra: '' },
               { icon: cardIconDataUrls.clock,    label: '最佳时间', value: currentStrategy.best_time, extra: '' },
-              { icon: getStructureIcon(currentStrategy.recommended_area), label: '推荐结构', value: extractStructure(currentStrategy.recommended_area), extra: '' },
-              { icon: cardIconDataUrls.sun,      label: '活跃度',   value: '', extra: 'meter' },
+              { icon: cardIconDataUrls.radar,    label: '今日状态', value: currentStrategy.fish_behavior, extra: 'activity' },
             ].map(({ icon, label, value, extra }, i) => (
-              <div key={i} className="scard-info-cell">
+              <div key={i} className={`scard-info-cell ${extra === 'activity' ? 'scard-info-cell-wide' : ''}`}>
                 {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img src={icon} alt="" style={{ width: 28, height: 28, imageRendering: 'pixelated', flexShrink: 0 }} />
-                <div style={{ flex: 1, minWidth: 0 }}>
-                  <div className="scard-info-label">{label}</div>
-                  {extra === 'stars' ? (
+                <span className="scard-icon-box"><img src={icon} alt="" /></span>
+                <div className="scard-info-text">
+                  {extra === 'activity' ? (
                     <>
-                      <div className="scard-info-value">{value}</div>
-                      <div className="scard-stars">
-                        {Array.from({ length: 5 }).map((_, si) => (
-                          si < Math.round(currentStrategy.activity_score / 20)
-                            /* eslint-disable-next-line @next/next/no-img-element */
-                            ? <img key={si} src={cardIconDataUrls.star} alt="★" style={{ width: 14, height: 14, imageRendering: 'pixelated' }} />
-                            : <span key={si} style={{ color: '#2a3a55', fontSize: 13, lineHeight: '14px' }}>★</span>
-                        ))}
+                      <div className="scard-info-label-row">
+                        <span className="scard-info-label">{label}</span>
+                        <span className="scard-activity-num">{currentStrategy.activity_score}<span>/100</span></span>
                       </div>
-                    </>
-                  ) : extra === 'meter' ? (
-                    <>
-                      <div className="scard-activity-top">
-                        <span className="scard-activity-num">{currentStrategy.activity_score}</span>
-                        <span className="scard-activity-sub">/100</span>
-                      </div>
-                      <div className="scard-meter">
-                        {Array.from({ length: 12 }).map((_, mi) => (
-                          <span key={mi} style={{ background: mi < Math.round(currentStrategy.activity_score / 100 * 12) ? '#7eb337' : '#1c324f' }} />
-                        ))}
+                      <div className="scard-info-value-row">
+                        <span className="scard-info-value">{value}</span>
+                        <div className="scard-meter">
+                          {Array.from({ length: 12 }).map((_, mi) => (
+                            <span
+                              key={mi}
+                              style={{
+                                background: mi < Math.round(currentStrategy.activity_score / 100 * 12) ? '#7eb337' : '#1c324f',
+                                borderColor: mi < Math.round(currentStrategy.activity_score / 100 * 12) ? '#5a8a22' : '#233a55',
+                              }}
+                            />
+                          ))}
+                        </div>
                       </div>
                     </>
                   ) : (
-                    <div className="scard-info-value">{value}</div>
+                    <>
+                      <div className="scard-info-label">{label}</div>
+                      <div className="scard-info-value">{value}</div>
+                    </>
                   )}
                 </div>
               </div>
@@ -555,8 +638,8 @@ export default function Home() {
             <div className="scard-section-body">
               <div className="scard-section-header">
                 {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img src={cardIconDataUrls.leaf} alt="" style={{ width: 20, height: 20, imageRendering: 'pixelated' }} />
-                <span className="scard-section-title">季节习性</span>
+                <span className="scard-section-icon"><img src={cardIconDataUrls.leaf} alt="" /></span>
+                <span className="scard-section-title-wrap"><span className="scard-section-title">季节习性</span></span>
               </div>
               <div className="scard-section-text">{currentStrategy.season_pattern}</div>
             </div>
@@ -571,15 +654,20 @@ export default function Home() {
             <div className="scard-section-body">
               <div className="scard-section-header">
                 {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img src={cardIconDataUrls.fisherman} alt="" style={{ width: 32, height: 32, imageRendering: 'pixelated' }} />
-                <span className="scard-section-title">钓手建议</span>
+                <span className="scard-section-icon"><img src={cardIconDataUrls.fisherman} alt="" /></span>
+                <span className="scard-section-title-wrap"><span className="scard-section-title">钓手建议</span></span>
               </div>
               <div className="scard-section-text">{currentStrategy.casting_tip || currentStrategy.summary}</div>
             </div>
           </div>
 
           {/* Footer */}
-          <div className="scard-footer">· · ·&nbsp;&nbsp;上渔&nbsp;&nbsp;· · ·</div>
+          <div className="scard-footer">
+            <div className="scard-footer-line" />
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src={cardIconDataUrls.fish} alt="" className="scard-footer-fish" />
+            <div className="scard-footer-line" />
+          </div>
         </div>
       </div>
     </main>
@@ -588,16 +676,165 @@ export default function Home() {
 
 function Screen({ children, className = "" }: { children: React.ReactNode; className?: string }) {
   return (
-    <motion.section
-      className={`flex flex-1 flex-col pb-4 pt-10 ${className}`}
-      initial={{ opacity: 0, y: 18 }}
-      animate={{ opacity: 1, y: 0 }}
-      exit={{ opacity: 0, y: -18 }}
-      transition={{ duration: 0.34, ease: [0.22, 1, 0.36, 1] }}
-    >
+    <section className={`flex flex-1 flex-col pb-4 pt-10 ${className}`}>
       {children}
-    </motion.section>
+    </section>
   );
+}
+
+async function inlineImagesAsDataUrls(el: HTMLElement): Promise<void> {
+  const imgs = Array.from(el.querySelectorAll("img[src]")) as HTMLImageElement[];
+  await Promise.all(
+    imgs.map(async (img) => {
+      const src = img.src;
+      if (!src || src.startsWith("data:")) return;
+      try {
+        const resp = await fetch(src);
+        if (!resp.ok) return;
+        const blob = await resp.blob();
+        const dataUrl = await new Promise<string>((resolve, reject) => {
+          const reader = new FileReader();
+          reader.onload = () => resolve(reader.result as string);
+          reader.onerror = reject;
+          reader.readAsDataURL(blob);
+        });
+        img.src = dataUrl;
+      } catch { /* keep original */ }
+    }),
+  );
+}
+
+function buildSvgShareCard(el: HTMLElement) {
+  const clone = el.cloneNode(true) as HTMLElement;
+  clone.setAttribute("xmlns", "http://www.w3.org/1999/xhtml");
+  clone.querySelectorAll("img").forEach((img) => {
+    const src = img.getAttribute("src");
+    if (src?.startsWith("/")) img.setAttribute("src", `${window.location.origin}${src}`);
+  });
+
+  const width = Math.ceil(el.getBoundingClientRect().width || 720);
+  const height = Math.ceil(el.scrollHeight || el.getBoundingClientRect().height || 1184);
+  let cssText = "";
+  Array.from(document.styleSheets).forEach((sheet) => {
+    try {
+      Array.from(sheet.cssRules).forEach((rule) => {
+        cssText += `${rule.cssText}\n`;
+      });
+    } catch {
+      /* Ignore stylesheets the browser does not expose. */
+    }
+  });
+  cssText = cssText
+    .replaceAll('url("/', `url("${window.location.origin}/`)
+    .replaceAll("url('/", `url('${window.location.origin}/`)
+    .replaceAll("url(/", `url(${window.location.origin}/`);
+
+  const style = document.createElement("style");
+  style.textContent = cssText;
+  clone.prepend(style);
+
+  const html = new XMLSerializer().serializeToString(clone);
+  const svg = [
+    `<svg xmlns="http://www.w3.org/2000/svg" width="${width}" height="${height}" viewBox="0 0 ${width} ${height}">`,
+    `<foreignObject width="100%" height="100%">${html}</foreignObject>`,
+    "</svg>",
+  ].join("");
+  return `data:image/svg+xml;charset=utf-8,${encodeURIComponent(svg)}`;
+}
+
+function buildManualSvgShareCard({
+  weather,
+  fish,
+  strategy,
+  fishSrc,
+}: {
+  weather: Weather;
+  fish: string;
+  strategy: Strategy;
+  fishSrc: string;
+}) {
+  const esc = (value: string | number) =>
+    String(value)
+      .replaceAll("&", "&amp;")
+      .replaceAll("<", "&lt;")
+      .replaceAll(">", "&gt;")
+      .replaceAll('"', "&quot;");
+  const imageHref = fishSrc.startsWith("data:") ? fishSrc : `${window.location.origin}${fishSrc}`;
+  const statY = 48;
+  const info = [
+    ["推荐结构", extractStructure(strategy.recommended_area), 74, 450],
+    ["推荐区域", strategy.recommended_area, 396, 450],
+    ["推荐水深", strategy.recommended_depth, 74, 514],
+    ["推荐饵料", strategy.recommended_bait, 396, 514],
+    ["操作方式", strategy.retrieve_style, 74, 578],
+    ["最佳时间", strategy.best_time, 396, 578],
+  ];
+  const infoSvg = info.map(([label, value, x, y]) => `
+    <text x="${x}" y="${y}" class="label">${esc(label)}</text>
+    <text x="${x}" y="${Number(y) + 28}" class="value">${esc(value)}</text>
+  `).join("");
+  const activeBlocks = Math.round(strategy.activity_score / 100 * 12);
+  const meter = Array.from({ length: 12 }).map((_, index) => {
+    const x = 428 + index * 16;
+    return `<rect x="${x}" y="664" width="13" height="13" fill="${index < activeBlocks ? "#7eb337" : "#1c324f"}" stroke="#233a55" stroke-width="1"/>`;
+  }).join("");
+
+  const svg = `
+<svg xmlns="http://www.w3.org/2000/svg" width="720" height="1080" viewBox="0 0 720 1080">
+  <style>
+    @font-face{font-family:Zpix;src:url("${window.location.origin}/fonts/zpix.woff2") format("woff2");}
+    text{font-family:Zpix,"Noto Sans SC",sans-serif;dominant-baseline:hanging}
+    .stat-label{fill:#b8d76b;font-size:16px;letter-spacing:2px}
+    .stat-value{fill:#f4f6ec;font-size:15px}
+    .label{fill:#b8d76b;font-size:17px;letter-spacing:2px}
+    .value{fill:#f4f6ec;font-size:15px}
+    .body{fill:#f4f6ec;font-size:15px}
+  </style>
+  <rect width="720" height="1080" fill="#110d37"/>
+  <rect x="20" y="20" width="680" height="1040" fill="#110d37" stroke="#3a3175" stroke-width="2"/>
+  <line x1="48" y1="104" x2="672" y2="104" stroke="#4f7894" stroke-width="2" stroke-dasharray="4 6"/>
+
+  <text x="66" y="${statY}" class="stat-label">日期</text><text x="66" y="${statY + 28}" class="stat-value">${esc(formatDate())}</text>
+  <text x="190" y="${statY}" class="stat-label">天气</text><text x="190" y="${statY + 28}" class="stat-value">${esc(weather.condition)}</text>
+  <text x="314" y="${statY}" class="stat-label">温度</text><text x="314" y="${statY + 28}" class="stat-value">${esc(weather.temperature)}°C</text>
+  <text x="438" y="${statY}" class="stat-label">风速</text><text x="438" y="${statY + 28}" class="stat-value">微风</text>
+  <text x="562" y="${statY}" class="stat-label">时间段</text><text x="562" y="${statY + 28}" class="stat-value">${esc(getTimePeriod())}</text>
+
+  <text x="360" y="140" text-anchor="middle" fill="#b8d76b" font-size="48" letter-spacing="6">${esc(strategy.title)}</text>
+  <text x="290" y="214" fill="#b8c3cc" font-size="19" letter-spacing="3">目标鱼</text>
+  <rect x="370" y="207" width="72" height="32" fill="#0f1230" stroke="#5a8a22" stroke-width="2"/>
+  <text x="386" y="214" fill="#f4f6ec" font-size="19" letter-spacing="4">${esc(fish)}</text>
+
+  <rect x="50" y="262" width="620" height="188" fill="#0d1230"/>
+  <circle cx="104" cy="300" r="10" fill="none" stroke="#7bd4ff" stroke-width="4"/>
+  <rect x="88" y="420" width="112" height="14" fill="#49351e"/>
+  <rect x="520" y="420" width="112" height="14" fill="#49351e"/>
+  <image href="${esc(imageHref)}" x="96" y="248" width="540" height="230" preserveAspectRatio="xMidYMid meet"/>
+
+  <rect x="50" y="468" width="620" height="248" fill="#0f1230" stroke="#3a3175" stroke-width="2"/>
+  <line x1="360" y1="468" x2="360" y2="652" stroke="#233a55" stroke-dasharray="3 5"/>
+  <line x1="50" y1="532" x2="670" y2="532" stroke="#233a55" stroke-dasharray="3 5"/>
+  <line x1="50" y1="596" x2="670" y2="596" stroke="#233a55" stroke-dasharray="3 5"/>
+  <line x1="50" y1="652" x2="670" y2="652" stroke="#233a55" stroke-dasharray="3 5"/>
+  ${infoSvg}
+  <text x="74" y="666" class="label">今日状态</text>
+  <text x="74" y="694" class="value">${esc(strategy.fish_behavior)}</text>
+  <text x="610" y="650" fill="#f4f6ec" font-size="24" text-anchor="end">${esc(strategy.activity_score)}<tspan font-size="13" fill="#b8c3cc">/100</tspan></text>
+  ${meter}
+
+  <rect x="50" y="738" width="620" height="112" fill="#0f1230" stroke="#3a3175" stroke-width="2"/>
+  <rect x="76" y="760" width="160" height="76" fill="#d86832"/>
+  <rect x="274" y="762" width="128" height="42" fill="#7eb337"/>
+  <text x="298" y="772" fill="#fff" font-size="19" letter-spacing="4">季节习性</text>
+  <text x="256" y="818" class="body">${esc(strategy.season_pattern)}</text>
+
+  <rect x="50" y="866" width="620" height="112" fill="#0f1230" stroke="#3a3175" stroke-width="2"/>
+  <rect x="76" y="894" width="160" height="56" fill="#32a8d8"/>
+  <rect x="274" y="890" width="128" height="42" fill="#7eb337"/>
+  <text x="298" y="900" fill="#fff" font-size="19" letter-spacing="4">钓手建议</text>
+  <text x="256" y="946" class="body">${esc(strategy.casting_tip || strategy.summary)}</text>
+</svg>`;
+  return `data:image/svg+xml;charset=utf-8,${encodeURIComponent(svg)}`;
 }
 
 function StepTitle({ eyebrow, title }: { eyebrow: string; title: string }) {
@@ -667,10 +904,23 @@ function getWeatherIcon(condition: string): string {
 }
 
 function getBaitIcon(bait: string): string {
-  if (bait.includes("虫") || bait.includes("玉米") || bait.includes("谷")) return cardIconDataUrls.cornBait;
-  if (bait.includes("软虫") || bait.includes("假饵") || bait.includes("路亚")) return cardIconDataUrls.lure;
-  if (bait.includes("米诺") || bait.includes("匙") || bait.includes("VIB")) return cardIconDataUrls.vibLure;
+  // Plant / grass-based
+  if (bait.includes("植物") || bait.includes("谷物") || bait.includes("草") ||
+      bait.includes("麦") || bait.includes("饭") || bait.includes("豆") ||
+      bait.includes("面") || bait.includes("窝料")) return cardIconDataUrls.leaf;
+  // Corn
+  if (bait.includes("玉米")) return cardIconDataUrls.cornBait;
+  // Meat / animal-based
+  if (bait.includes("腥") || bait.includes("红虫") || bait.includes("沙蚕") ||
+      bait.includes("鱼肉") || bait.includes("虾") || bait.includes("活饵") ||
+      bait.includes("蚯蚓")) return cardIconDataUrls.fish;
+  // Fly fishing
   if (bait.includes("若虫") || bait.includes("毛钩")) return cardIconDataUrls.bait;
+  // Soft plastics
+  if (bait.includes("软虫") || bait.includes("假饵")) return cardIconDataUrls.lure;
+  // Hard lures
+  if (bait.includes("米诺") || bait.includes("VIB") || bait.includes("铁板")) return cardIconDataUrls.vibLure;
+  if (bait.includes("匙") || bait.includes("汤匙") || bait.includes("勺")) return cardIconDataUrls.spoonLure;
   return cardIconDataUrls.spoonLure;
 }
 
