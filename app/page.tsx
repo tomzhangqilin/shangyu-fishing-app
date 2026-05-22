@@ -7,6 +7,13 @@ import { useMemo, useState } from "react";
 const icon = (name: string) => `/poster-icons/${name}.png`;
 const fishArt = (name: string) => `/fish-art/${name}.png`;
 
+const HookSvg = ({ color = "#1e2d5c", size = 20 }: { color?: string; size?: number }) => (
+  <svg width={size} height={size} viewBox="0 0 22 26" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M15 4 C15 2, 16.5 1, 18 1 C19.5 1, 21 2, 21 4 L21 16 C21 21, 16.5 25, 11 25 C5.5 25, 1 21, 1 16 C1 11.5, 5 9, 8.5 10.5" stroke={color} strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" fill="none"/>
+    <path d="M8.5 10.5 L2 5.5" stroke={color} strokeWidth="2.5" strokeLinecap="round"/>
+  </svg>
+);
+
 const posterIconDataUrls = {
   calendar: icon("calendar"),
   cloud: icon("cloud"),
@@ -50,6 +57,8 @@ const cardIconDataUrls = {
   baitLure: icon("baitLure"),
   // 今日状态专属星形
   activityStar: "/poster-icons/activityStar.svg",
+  // 分享卡 footer logo
+  yuyueLogo: "/poster-icons/yuyueLogo.png",
 };
 
 const fishArtDataUrls = {
@@ -475,10 +484,13 @@ export default function Home() {
     <main className="relative min-h-screen overflow-hidden px-5 py-6">
       <div className="lake-motion" />
       <div className="relative z-10 mx-auto flex min-h-[calc(100vh-48px)] w-full max-w-md flex-col">
-        <header className="flex items-center justify-between py-2 text-sm text-slate-500">
-          <span className="thin-text">上渔</span>
+        <header className="flex items-center justify-between py-2">
+          <div className="flex items-center gap-1.5">
+            <HookSvg color="#1e2d5c" size={22} />
+            <span className="text-xl font-bold tracking-widest text-slate-800">上渔</span>
+          </div>
           {step > 0 && (
-            <button className="rounded-full px-3 py-2 transition hover:bg-slate-100" onClick={() => setStep(0)}>
+            <button className="rounded-full px-3 py-2 text-sm text-slate-500 transition hover:bg-slate-100" onClick={() => setStep(0)}>
               重置
             </button>
           )}
@@ -778,11 +790,16 @@ export default function Home() {
           </div>
 
           {/* Footer */}
-          <div className="scard-footer">
-            <div className="scard-footer-line" />
+          <div className="scard-footer" style={{ justifyContent: 'space-between', padding: '10px 4px 4px' }}>
+            {/* Left: 上渔 + hook */}
+            <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+              <HookSvg color="#b8d76b" size={20} />
+              <span style={{ fontSize: '16px', color: '#b8d76b', letterSpacing: '3px', fontFamily: 'Zpix, sans-serif' }}>上渔</span>
+            </div>
+            {/* Right: 渔悦 logo in white badge */}
             {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src={cardIconDataUrls.fish} alt="" className="scard-footer-fish" />
-            <div className="scard-footer-line" />
+            <img src={cardIconDataUrls.yuyueLogo} alt="渔悦大学生钓鱼交流平台"
+              style={{ height: '32px', width: 'auto', objectFit: 'contain', background: '#fff', padding: '2px 6px', borderRadius: '2px' }} />
           </div>
         </div>
       </div>
@@ -1155,8 +1172,12 @@ function drawPixelPoster(
 
   ctx.fillStyle = lime;
   ctx.font = `bold ${pl.footer.fontSize}px monospace`;
-  ctx.textAlign = "center";
-  ctx.fillText("· · ·  上渔  · · ·", pl.footer.x, pl.footer.y);
+  ctx.textAlign = "left";
+  ctx.fillText("⚓ 上渔", pl.footer.x - 460, pl.footer.y);
+  ctx.textAlign = "right";
+  ctx.fillStyle = white;
+  ctx.font = `${pl.footer.fontSize - 2}px monospace`;
+  ctx.fillText("渔悦大学生钓鱼交流平台", pl.footer.x + 460, pl.footer.y);
   ctx.textAlign = "left";
 }
 
