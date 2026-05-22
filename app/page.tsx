@@ -44,6 +44,10 @@ const cardIconDataUrls = {
   grassArt: icon("grassArt"),
   seasonScene: icon("seasonScene"),
   shoreScene: icon("shoreScene"),
+  // 三类饵专属图标
+  baitWorm: icon("baitWorm"),
+  baitDough: icon("baitDough"),
+  baitLure: icon("baitLure"),
 };
 
 const fishArtDataUrls = {
@@ -904,24 +908,19 @@ function getWeatherIcon(condition: string): string {
 }
 
 function getBaitIcon(bait: string): string {
-  // Plant / grass-based
-  if (bait.includes("植物") || bait.includes("谷物") || bait.includes("草") ||
-      bait.includes("麦") || bait.includes("饭") || bait.includes("豆") ||
-      bait.includes("面") || bait.includes("窝料")) return cardIconDataUrls.leaf;
-  // Corn
-  if (bait.includes("玉米")) return cardIconDataUrls.cornBait;
-  // Meat / animal-based
-  if (bait.includes("腥") || bait.includes("红虫") || bait.includes("沙蚕") ||
-      bait.includes("鱼肉") || bait.includes("虾") || bait.includes("活饵") ||
-      bait.includes("蚯蚓")) return cardIconDataUrls.fish;
-  // Fly fishing
-  if (bait.includes("若虫") || bait.includes("毛钩")) return cardIconDataUrls.bait;
-  // Soft plastics
-  if (bait.includes("软虫") || bait.includes("假饵")) return cardIconDataUrls.lure;
-  // Hard lures
-  if (bait.includes("米诺") || bait.includes("VIB") || bait.includes("铁板")) return cardIconDataUrls.vibLure;
-  if (bait.includes("匙") || bait.includes("汤匙") || bait.includes("勺")) return cardIconDataUrls.spoonLure;
-  return cardIconDataUrls.spoonLure;
+  // 人工假饵（路亚、拟饵）
+  if (bait.includes("软虫") || bait.includes("假饵") || bait.includes("路亚") ||
+      bait.includes("米诺") || bait.includes("VIB") || bait.includes("铁板") ||
+      bait.includes("若虫") || bait.includes("毛钩") || bait.includes("匙") ||
+      bait.includes("勺") || bait.includes("拟饵") || bait.includes("水面系"))
+    return cardIconDataUrls.baitLure;
+  // 荤腥 / 动物饵
+  if (bait.includes("腥") || bait.includes("红虫") || bait.includes("蚯蚓") ||
+      bait.includes("沙蚕") || bait.includes("鱼肉") || bait.includes("虾") ||
+      bait.includes("活饵") || bait.includes("虫"))
+    return cardIconDataUrls.baitWorm;
+  // 植物 / 谷物饵（兜底）
+  return cardIconDataUrls.baitDough;
 }
 
 function getStructureIcon(area: string): string {
