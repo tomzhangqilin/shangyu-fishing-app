@@ -625,7 +625,7 @@ export default function Home() {
                   <img
                     src={cardDataUrl}
                     alt="分享卡"
-                    className="w-full rounded-[20px] shadow-2xl shadow-black/40"
+                    className="w-full rounded-b-[20px]"
                   />
                 ) : cardError ? (
                   <div className="flex aspect-[9/13] w-full flex-col items-center justify-center rounded-[20px] border border-red-200 bg-red-50 px-8 text-center text-lg thin-text leading-8 text-red-600">
