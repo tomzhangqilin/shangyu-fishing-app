@@ -898,7 +898,7 @@ function buildManualSvgShareCard({
   const svg = `
 <svg xmlns="http://www.w3.org/2000/svg" width="720" height="1080" viewBox="0 0 720 1080">
   <style>
-    @font-face{font-family:Zpix;src:url("${window.location.origin}/fonts/zpix.woff2") format("woff2");}
+    @font-face{font-family:Zpix;src:url("${window.location.origin}/fonts/ark-pixel.otf") format("opentype");}
     text{font-family:Zpix,"Noto Sans SC",sans-serif;dominant-baseline:hanging}
     .stat-label{fill:#b8d76b;font-size:16px;letter-spacing:2px}
     .stat-value{fill:#f4f6ec;font-size:15px}
