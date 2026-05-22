@@ -118,58 +118,168 @@ const weatherText: Record<number, string> = {
 
 const localStrategies: Record<string, Strategy> = {
   路亚: {
-    title: "今天适合浅层慢搜",
-    fish_behavior: "黑鲈活性较高",
-    season_pattern: "水温回升后，黑鲈会逐渐靠近浅层结构区觅食。",
-    recommended_area: "草区边缘、倒木附近",
-    recommended_depth: "1.2-1.8米",
-    recommended_bait: "红色软虫",
-    retrieve_style: "慢速收线",
-    best_time: "日落前1小时",
-    casting_tip: "先打草区边缘，再搜索倒木阴影，保持慢速收线。",
+    title: "夏季主攻阴影区慢搜",
+    fish_behavior: "掠食鱼藏于阴凉障碍物下等待猎物",
+    season_pattern: "夏季高温下，掠食性鱼类白天藏匿于水草内侧、桥墩阴影、倒木下方，清晨及傍晚上浅水捕食。雷雨前后气压骤降时全天均有爆口机会，是夏季路亚最不可错过的窗口。",
+    recommended_area: "水草边缘、桥墩阴影区、倒木附近",
+    recommended_depth: "0.5–2.0米",
+    recommended_bait: "5cm软虫（德州钓）/ 米诺",
+    retrieve_style: "慢收线 + 短顿停（Stop & Go）",
+    best_time: "清晨5:00–8:00 / 傍晚17:30–20:00",
+    casting_tip: "优先攻草缘，距草0.5m处抛投沿边缘慢操；晴天强光选自然色系，阴天换荧光色；雷雨前后气压骤降是全天爆口的绝佳窗口。",
     activity_score: 82,
-    summary: "阴天低光环境下，黑鲈更容易靠近浅层结构区觅食。",
+    summary: "高温迫使掠食鱼避光藏底，清晨傍晚是最佳出竿时机，阴凉结构区是夏季路亚的核心钓位。",
   },
   台钓: {
-    title: "今天适合稳守底层",
-    fish_behavior: "鲤鱼觅食稳定",
-    season_pattern: "水温稳定时，底层鱼会沿缓流湾和泥底区持续觅食。",
-    recommended_area: "缓流回湾、泥底平滩",
-    recommended_depth: "1.8-2.5米",
-    recommended_bait: "谷物香型饵",
-    retrieve_style: "稳守待口",
-    best_time: "清晨或上午",
-    casting_tip: "先少量做窝，等鱼进窝后放慢补窝频率。",
+    title: "夏季深水守底调灵找层",
+    fish_behavior: "底层鱼下潜深水，开口轻微需精细调钓",
+    season_pattern: "夏季鲤鱼、草鱼受高温影响下潜至2–4米深水，开口时间集中在溶氧较高的清晨与傍晚。草鱼夏季食欲旺盛会上浮，鲤鱼则紧贴底层觅食。",
+    recommended_area: "深水区2–4m、树荫下、进水口附近",
+    recommended_depth: "2.0–4.0米",
+    recommended_bait: "轻麸+玉米香型饵（减腥增香）",
+    retrieve_style: "调三钓一，稳守逐层探鱼",
+    best_time: "清晨5:00–8:00 / 傍晚17:00–19:00",
+    casting_tip: "先底钓探位，无信号则上推浮漂至半水逐步找层；夏季小杂鱼干扰多，改用硬饵减少雾化；草鱼可改浮钓配撸草或草段。",
     activity_score: 68,
-    summary: "稳定天气适合守钓，重点放在缓流和泥底交界处。",
+    summary: "夏季台钓关键在于找准水层、调灵浮漂；放弃小杂鱼干扰，专注大鱼轻微的进食信号。",
   },
   飞钓: {
-    title: "今天适合阴影轻漂",
-    fish_behavior: "溪鱼活性中等",
-    season_pattern: "有遮挡的浅滩和阴影边缘更容易聚鱼。",
-    recommended_area: "树荫浅滩、溪流阴影区",
-    recommended_depth: "0.6-1.2米",
-    recommended_bait: "橄榄色若虫",
-    retrieve_style: "轻柔控线漂流",
-    best_time: "上午或傍晚",
-    casting_tip: "用轻落点搜索阴影边缘，让假饵顺流自然漂过。",
-    activity_score: 65,
-    summary: "低风速适合细线控漂，重点观察阴影与明水交界。",
+    title: "夏季昆虫旺季干毛钩当道",
+    fish_behavior: "白条全天追食水面漂浮昆虫，进食频繁",
+    season_pattern: "夏季是飞钓全年最佳季节，昆虫孵化旺盛。白条整天活跃于水面，黑鲈傍晚上浮捕食，鳜鱼喜湿毛钩流水区。清晨与傍晚阴影边缘鱼口最旺。",
+    recommended_area: "清澈溪流缓流区、水草边缘静水区、瀑布脚水潭",
+    recommended_depth: "0.1–0.5米（水面漂流）",
+    recommended_bait: "干毛钩#14–#18 / 若虫#12–#16",
+    retrieve_style: "轻落水，顺流自然漂移不主动抖动",
+    best_time: "清晨6:00–9:00 / 傍晚17:00–20:00",
+    casting_tip: "站在进食点上风10–15m处顺风送饵；毛钩入水声要轻，宁缩抛距也要精准落点；让毛钩随流漂移，无需主动抖动。",
+    activity_score: 74,
+    summary: "夏季昆虫大量孵化，干毛钩飞钓进入旺季；轻落水、精准落点、顺流漂移是夏日飞钓三要素。",
   },
   海钓: {
-    title: "今天适合礁边搜索",
-    fish_behavior: "海鱼随暗流聚集",
-    season_pattern: "涨落潮前后，礁石外缘和浪线附近更容易出鱼。",
-    recommended_area: "礁石外缘、浪线附近",
-    recommended_depth: "2.4-3.6米",
-    recommended_bait: "银色米诺",
-    retrieve_style: "中速匀速搜索",
-    best_time: "涨潮前后",
-    casting_tip: "优先覆盖浪线和暗流交界，抛投角度比距离更重要。",
-    activity_score: 70,
-    summary: "浪线和暗流会带来饵鱼，适合用银色拟饵持续搜索。",
+    title: "夏季礁边搜底把握潮汐窗口",
+    fish_behavior: "海鲈随涨潮近岸，追逐礁石区饵鱼",
+    season_pattern: "夏季海鲈随水温升高向近岸迁移，礁石带、防波堤柱脚及河口咸淡水交汇处是最佳钓位。涨潮前1小时至满潮后1小时为最强捕食窗口。",
+    recommended_area: "礁石外缘、防波堤柱脚、河口咸淡水交汇处",
+    recommended_depth: "2.4–5.0米",
+    recommended_bait: "沉水米诺90–120mm / 铁板20–60g",
+    retrieve_style: "远投后慢速匀收，配合海浪辅助动作",
+    best_time: "涨潮前1小时至满潮后1小时 / 黎明5:00–7:00",
+    casting_tip: "涨潮前提前到位，优先覆盖礁石缝隙与防波堤柱脚；退潮后改用铁板攻深水区；正午11:00–15:00建议避开，注意防晒防滑。",
+    activity_score: 78,
+    summary: "潮汐是海钓的核心节律，涨潮窗口+黎明低光是全天最佳钓鱼组合，礁石边缘是海鲈夏季的必守据点。",
   },
 };
+
+type FishProfile = {
+  behavior: string;
+  season_pattern: string;
+  recommended_area: string;
+  recommended_depth: string;
+  recommended_bait: string;
+  best_time: string;
+  activity_score: number;
+};
+
+const fishProfiles: Record<string, FishProfile> = {
+  黑鲈: {
+    behavior: "高温下藏于阴凉障碍物，清晨傍晚上浅水捕食",
+    season_pattern: "夏季黑鲈白天藏匿于水草内侧、倒木、桥墩阴影下，清晨傍晚上浅水主动捕食，阴天及雷雨前后气压骤降时全天均有爆口机会。",
+    recommended_area: "水草边缘、桥墩阴影、倒木附近",
+    recommended_depth: "1.0–2.0米",
+    recommended_bait: "5cm软虫德州钓 / 米诺",
+    best_time: "清晨5:00–8:00 / 傍晚17:30–20:00",
+    activity_score: 82,
+  },
+  黑鱼: {
+    behavior: "夏季活跃于水草区，雨后气压骤降时爆口明显",
+    season_pattern: "黑鱼是最耐高温的淡水鱼之一，夏季在水草密集区极为活跃。喜欢在草洞、芦苇根部伏击猎物，雨后30分钟往往迎来全天最强爆口。",
+    recommended_area: "水草密集区、草洞内部、芦苇边",
+    recommended_depth: "0.3–1.2米",
+    recommended_bait: "青蛙饵 / 虫形软饵",
+    best_time: "全天有效，雨后30分钟及清晨最佳",
+    activity_score: 88,
+  },
+  鲤鱼: {
+    behavior: "高温下潜深水，开口轻微，早晚觅食",
+    season_pattern: "夏季鲤鱼受高温影响下潜至2–4米深水区，白天代谢降低、开口迟缓，清晨与傍晚是最佳进食时段。进水口和树荫处溶氧充足，是聚鱼首选。",
+    recommended_area: "深水缓流区2–4m、进水口附近、树荫下",
+    recommended_depth: "2.0–4.0米",
+    recommended_bait: "玉米香型轻麸饵（减腥增香）",
+    best_time: "清晨5:00–8:00 / 傍晚17:00–19:00",
+    activity_score: 68,
+  },
+  鲶鱼: {
+    behavior: "白天藏于障碍物下，日落后大范围觅食",
+    season_pattern: "鲶鱼夏季白天藏于深坑、障碍物下几乎不动，日落后开始大范围觅食。夜钓是夏季鲶鱼的核心策略，重腥饵气味越重越能引鱼远距离觅食。",
+    recommended_area: "障碍物旁、深坑底部、桥墩脚下",
+    recommended_depth: "2.5–5.0米",
+    recommended_bait: "活蚯蚓 / 腥香底饵（气味越重越好）",
+    best_time: "夜间20:00–23:00最佳",
+    activity_score: 75,
+  },
+  草鱼: {
+    behavior: "夏季上浮活跃，清晨食欲旺盛但警觉性高",
+    season_pattern: "草鱼夏季食欲旺盛且会上浮，是少数在高温下依然活跃的淡水鱼。喜在水草边、进水口附近浮游觅食，浮钓配撸草或草段效果极佳。",
+    recommended_area: "水草边缘、进水口、宽阔深水湾",
+    recommended_depth: "0.3–0.8米（浮钓）",
+    recommended_bait: "撸草 / 草段 / 菜叶（浮钓首选）",
+    best_time: "清晨5:30–8:30",
+    activity_score: 72,
+  },
+  白条: {
+    behavior: "夏季全天活跃，追逐水面漂浮昆虫",
+    season_pattern: "白条是夏季溪流中最活跃的鱼种，整天追逐水面漂流昆虫，对飞钓干毛钩反应极为积极。清澈缓流区和迎风岸是其聚集的天然食场。",
+    recommended_area: "清澈溪流缓流区、迎风岸边",
+    recommended_depth: "0.1–0.5米",
+    recommended_bait: "干毛钩#14–#18 / 微型路亚（3cm以下）",
+    best_time: "全天，上午9:00–11:00最活跃",
+    activity_score: 85,
+  },
+  鳜鱼: {
+    behavior: "傍晚后活跃，伏击小鱼，偏爱流水结构",
+    season_pattern: "鳜鱼是夏季傍晚至夜间最活跃的掠食性淡水鱼，偏爱活水入口和流速边缘。以伏击方式捕食小鱼，米诺类饵型慢速抽停能有效模拟受伤小鱼。",
+    recommended_area: "活水入口、流速边缘、礁石旁",
+    recommended_depth: "1.5–3.0米",
+    recommended_bait: "6–9cm米诺 / 铅笔饵 / 软虫",
+    best_time: "傍晚17:30–20:00 / 夜间",
+    activity_score: 76,
+  },
+  海鲈: {
+    behavior: "夏季近岸迁移，随涨潮至礁石带捕食",
+    season_pattern: "夏季海鲈跟随水温升高向近岸迁移，礁石带、防波堤柱脚及河口咸淡水交汇处是最佳钓位。涨潮前1小时至满潮后1小时为最强捕食窗口。",
+    recommended_area: "礁石外缘、防波堤柱脚、河口咸淡水交汇",
+    recommended_depth: "2.4–5.0米",
+    recommended_bait: "沉水米诺90–120mm / 铁板20–60g",
+    best_time: "涨潮前1小时至满潮后1小时 / 黎明5:00–7:00",
+    activity_score: 78,
+  },
+  狗鱼: {
+    behavior: "偏好低温清水，清晨阴天追食大型饵",
+    season_pattern: "狗鱼偏好低温，夏季活性相对偏低，但在清晨气温最低时段及阴天仍会积极追饵。大型米诺和金属匙的快速强烈动作最易激发攻击本能。",
+    recommended_area: "清冷深水区、水草边缘、入水口附近",
+    recommended_depth: "2.0–4.5米",
+    recommended_bait: "大型米诺12–18cm / 金属匙",
+    best_time: "清晨5:00–8:00 / 阴天全天",
+    activity_score: 65,
+  },
+};
+
+function getLocalStrategy(style: string, fish: string): Strategy {
+  const base = localStrategies[style];
+  const profile = fishProfiles[fish];
+  if (!profile) return base;
+  return {
+    ...base,
+    fish_behavior: profile.behavior,
+    season_pattern: profile.season_pattern,
+    recommended_area: profile.recommended_area,
+    recommended_depth: profile.recommended_depth,
+    recommended_bait: profile.recommended_bait,
+    best_time: profile.best_time,
+    activity_score: profile.activity_score,
+  };
+}
 
 export default function Home() {
   const [step, setStep] = useState(0);
@@ -188,7 +298,7 @@ export default function Home() {
 
   const targetFish = fish;
   const currentWeather = weather || fallbackWeather;
-  const currentStrategy = useMemo(() => strategy || localStrategies[style], [strategy, style]);
+  const currentStrategy = useMemo(() => strategy || getLocalStrategy(style, fish), [strategy, style, fish]);
 
   async function detectEnvironment() {
     setStep(2);
@@ -254,7 +364,7 @@ export default function Home() {
       if (data.code !== 0) throw new Error("千帆策略生成失败");
       setStrategy(data.data);
     } catch {
-      setStrategy(localStrategies[style]);
+      setStrategy(getLocalStrategy(style, targetFish));
     } finally {
       setGenerating(false);
     }
