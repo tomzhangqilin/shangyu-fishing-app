@@ -795,8 +795,8 @@ export default function Home() {
 
           {/* Footer */}
           <div className="scard-footer" style={{ justifyContent: 'space-between', padding: '10px 4px 4px' }}>
-            <span style={{ fontSize: '16px', color: '#b8d76b', letterSpacing: '3px', fontFamily: 'Zpix, sans-serif' }}>上渔</span>
-            <span style={{ fontSize: '13px', color: '#b8c3cc', letterSpacing: '1px', fontFamily: 'Zpix, sans-serif' }}>渔悦大学生钓鱼交流平台</span>
+            <span style={{ fontSize: '16px', color: '#b8d76b', letterSpacing: '3px', fontFamily: 'WenQuanYiBitmapSong, BestTenDOT, sans-serif' }}>上渔</span>
+            <span style={{ fontSize: '13px', color: '#b8c3cc', letterSpacing: '1px', fontFamily: 'WenQuanYiBitmapSong, BestTenDOT, sans-serif' }}>渔悦大学生钓鱼交流平台</span>
           </div>
         </div>
       </div>
@@ -912,10 +912,10 @@ function buildManualSvgShareCard({
   const svg = `
 <svg xmlns="http://www.w3.org/2000/svg" width="720" height="1080" viewBox="0 0 720 1080">
   <style>
+    @font-face{font-family:WenQuanYiBitmapSong;src:url("${window.location.origin}/fonts/WenQuanYiBitmapSong.ttf") format("truetype");}
     @font-face{font-family:BestTenDOT;src:url("${window.location.origin}/fonts/BestTen-DOT.otf") format("opentype");}
-    @font-face{font-family:HanChen7px;src:url("${window.location.origin}/fonts/HanChen7px.ttf") format("truetype");}
     @font-face{font-family:Zpix;src:url("${window.location.origin}/fonts/ark-pixel.otf") format("opentype");}
-    text{font-family:BestTenDOT,HanChen7px,Zpix,"Noto Sans SC",sans-serif;dominant-baseline:hanging}
+    text{font-family:WenQuanYiBitmapSong,BestTenDOT,Zpix,"Noto Sans SC",sans-serif;dominant-baseline:hanging}
     .stat-label{fill:#b8d76b;font-size:16px;letter-spacing:2px}
     .stat-value{fill:#f4f6ec;font-size:15px}
     .label{fill:#b8d76b;font-size:17px;letter-spacing:2px}
