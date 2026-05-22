@@ -37,6 +37,8 @@
 
 * {
   box-sizing: border-box;
+  /* Normalise mixed-font vertical alignment */
+  vertical-align: baseline;
 }
 
 html {
@@ -50,8 +52,9 @@ body {
     radial-gradient(circle at 50% 105%, rgba(180, 210, 80, 0.10), transparent 40%),
     linear-gradient(180deg, #f8fbf4 0%, #f2f7ee 50%, #ecf4e8 100%);
   color: var(--foreground);
-  font-family: "Galmuri11", "HYPixel", "Zpix", "PingFang SC", sans-serif;
+  font-family: "Galmuri11", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
   font-size: 18px;
+  line-height: 1.5;
   letter-spacing: 0.5px;
 }
 
@@ -138,7 +141,7 @@ button {
   border: 2px solid var(--line);
   padding: 32px 36px 28px;
   position: relative;
-  font-family: "Galmuri11", "HYPixel", "Zpix", "Noto Sans SC", system-ui, sans-serif;
+  font-family: "Galmuri11", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
   color: var(--ink);
   box-sizing: border-box;
   -webkit-font-smoothing: antialiased;
