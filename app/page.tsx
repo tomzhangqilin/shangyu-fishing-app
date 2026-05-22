@@ -363,10 +363,10 @@ export default function Home() {
     <main className="relative min-h-screen overflow-hidden px-5 py-6">
       <div className="lake-motion" />
       <div className="relative z-10 mx-auto flex min-h-[calc(100vh-48px)] w-full max-w-md flex-col">
-        <header className="flex items-center justify-between py-2 text-sm text-white/55">
+        <header className="flex items-center justify-between py-2 text-sm text-slate-500">
           <span className="thin-text">上渔</span>
           {step > 0 && (
-            <button className="rounded-full px-3 py-2 transition hover:bg-white/10" onClick={() => setStep(0)}>
+            <button className="rounded-full px-3 py-2 transition hover:bg-slate-100" onClick={() => setStep(0)}>
               重置
             </button>
           )}
@@ -376,9 +376,9 @@ export default function Home() {
           {step === 0 && (
             <Screen key="landing" className="items-center justify-center text-center">
               <div>
-                <p className="mb-6 text-sm thin-text text-white/52">千帆智能钓鱼策略</p>
+                <p className="mb-6 text-sm thin-text text-slate-500">千帆智能钓鱼策略</p>
                 <h1 className="text-5xl thin-text leading-tight">今天怎么钓？</h1>
-                <p className="mx-auto mt-6 max-w-xs whitespace-pre-line text-xl thin-text leading-8 text-white/68">
+                <p className="mx-auto mt-6 max-w-xs whitespace-pre-line text-xl thin-text leading-8 text-slate-600">
                   {"基于当前位置与天气，\n生成今日钓鱼策略。"}
                 </p>
                 <PrimaryButton className="mt-12" onClick={() => setStep(1)}>
@@ -413,17 +413,17 @@ export default function Home() {
               <div className="mt-12 soft-card rounded-[28px] p-7">
                 {detecting ? (
                   <div className="space-y-5">
-                    <div className="h-8 w-44 animate-pulse rounded-full bg-white/12" />
-                    <div className="h-5 w-32 animate-pulse rounded-full bg-white/10" />
-                    <div className="h-5 w-24 animate-pulse rounded-full bg-white/10" />
+                    <div className="h-8 w-44 animate-pulse rounded-full bg-slate-200" />
+                    <div className="h-5 w-32 animate-pulse rounded-full bg-slate-100" />
+                    <div className="h-5 w-24 animate-pulse rounded-full bg-slate-100" />
                   </div>
                 ) : (
                   <>
                     <h2 className="text-4xl thin-text">{currentWeather.city}</h2>
-                    <p className="mt-5 text-xl thin-text text-white/68">
+                    <p className="mt-5 text-xl thin-text text-slate-600">
                       {currentWeather.condition} · {currentWeather.temperature}°C
                     </p>
-                    <p className="mt-2 text-xl thin-text text-white/68">风 {currentWeather.wind} 千米/时</p>
+                    <p className="mt-2 text-xl thin-text text-slate-600">风 {currentWeather.wind} 千米/时</p>
                   </>
                 )}
               </div>
@@ -462,10 +462,10 @@ export default function Home() {
               <div className="mt-9 soft-card rounded-[30px] p-7">
                 {generating ? (
                   <div className="space-y-6 py-2">
-                    <div className="h-5 w-28 animate-pulse rounded-full bg-white/12" />
-                    <div className="h-8 w-44 animate-pulse rounded-full bg-white/10" />
-                    <div className="h-5 w-24 animate-pulse rounded-full bg-white/12" />
-                    <div className="h-8 w-36 animate-pulse rounded-full bg-white/10" />
+                    <div className="h-5 w-28 animate-pulse rounded-full bg-slate-200" />
+                    <div className="h-8 w-44 animate-pulse rounded-full bg-slate-100" />
+                    <div className="h-5 w-24 animate-pulse rounded-full bg-slate-200" />
+                    <div className="h-8 w-36 animate-pulse rounded-full bg-slate-100" />
                   </div>
                 ) : (
                   <>
@@ -476,7 +476,7 @@ export default function Home() {
                     <ResultLine label="最佳时间" value={currentStrategy.best_time} />
                     <ResultLine label="活跃度" value={`${currentStrategy.activity_score} / 100`} />
                     <div className="pt-6">
-                      <p className="text-sm thin-text text-white/42">综合建议</p>
+                      <p className="text-sm thin-text text-slate-400">综合建议</p>
                       <p className="mt-3 text-2xl thin-text leading-9">&ldquo;{currentStrategy.summary}&rdquo;</p>
                     </div>
                   </>
@@ -504,14 +504,14 @@ export default function Home() {
                     className="w-full rounded-[20px] shadow-2xl shadow-black/40"
                   />
                 ) : cardError ? (
-                  <div className="flex aspect-[9/13] w-full flex-col items-center justify-center rounded-[20px] border border-red-300/30 bg-red-950/20 px-8 text-center text-lg thin-text leading-8 text-red-100/80">
+                  <div className="flex aspect-[9/13] w-full flex-col items-center justify-center rounded-[20px] border border-red-200 bg-red-50 px-8 text-center text-lg thin-text leading-8 text-red-600">
                     <span>生成失败，请返回后再试一次</span>
                     {cardErrorDetail ? (
-                      <span className="mt-4 max-w-full break-words text-xs leading-5 text-red-100/50">{cardErrorDetail}</span>
+                      <span className="mt-4 max-w-full break-words text-xs leading-5 text-red-400">{cardErrorDetail}</span>
                     ) : null}
                   </div>
                 ) : (
-                  <div className="flex aspect-[9/13] w-full items-center justify-center rounded-[20px] border border-white/12 bg-white/[0.06] text-lg thin-text text-white/56">
+                  <div className="flex aspect-[9/13] w-full items-center justify-center rounded-[20px] border border-slate-200 bg-slate-50 text-lg thin-text text-slate-400">
                     正在生成…
                   </div>
                 )}
@@ -844,7 +844,7 @@ function buildManualSvgShareCard({
 function StepTitle({ eyebrow, title }: { eyebrow: string; title: string }) {
   return (
     <div>
-      <p className="text-sm thin-text text-[#D6E264]">{eyebrow}</p>
+      <p className="text-sm thin-text text-[#5a7a00]">{eyebrow}</p>
       <h1 className="mt-4 text-4xl thin-text">{title}</h1>
     </div>
   );
@@ -878,8 +878,8 @@ function ChoiceCard({ children, selected, onClick }: { children: React.ReactNode
       onClick={onClick}
       className={`flex min-h-24 items-center justify-between rounded-[28px] border px-6 text-left text-2xl thin-text transition duration-300 ${
         selected
-          ? "border-[#D6E264] bg-[#D6E264]/10 text-white shadow-[0_18px_48px_rgba(214,226,100,0.08)]"
-          : "border-white/12 bg-white/[0.06] text-white/76 hover:border-white/24 hover:bg-white/[0.09]"
+          ? "border-[#D6E264] bg-[#D6E264]/20 text-slate-900 shadow-[0_8px_24px_rgba(90,122,0,0.15)]"
+          : "border-slate-200 bg-white text-slate-700 hover:border-slate-300 hover:bg-slate-50"
       }`}
     >
       {children}
@@ -889,8 +889,8 @@ function ChoiceCard({ children, selected, onClick }: { children: React.ReactNode
 
 function ResultLine({ label, value }: { label: string; value: string }) {
   return (
-    <div className="border-b border-white/10 py-5 first:pt-0">
-      <p className="text-sm thin-text text-white/42">{label}</p>
+    <div className="border-b border-slate-100 py-5 first:pt-0">
+      <p className="text-sm thin-text text-slate-400">{label}</p>
       <p className="mt-2 text-2xl thin-text">{value}</p>
     </div>
   );
